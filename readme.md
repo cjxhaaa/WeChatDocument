@@ -78,4 +78,4 @@ URL: [http://pay.weixin.qq.com](http://pay.weixin.qq.com)
 
 > 商户可以按照指示在微信官方帐户管理平台（用于本机快速付款和官方帐户付款）或微信开放平台（用于应用内付款）上申请付款方式。微信支付工作人员收到并审核申请后，将为商家打开相应的支付许可。商户会从微信支付助手收到一封包含所需付款说明的电子邮件，如图3.1所示。
 
-
+![3.1](http://git.duoshoubang.cn/document/WeChatPay/blob/master/WX20191211-154458.png)
