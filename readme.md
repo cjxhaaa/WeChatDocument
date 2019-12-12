@@ -1,3 +1,7 @@
+# 目录
+ 
+[TOC]
+
 ## 1. 关于文档
 
 > 本文档是微信支付API的官方手册。 因此，它是针对集成微信支付系统的技术架构师，研发工程师，测试工程师和服务工程师的教程，其中包括供应商的系统，例如在线购物平台，收银员系统或自动智能POS系统。 下面的主题旨在按顺序阅读，并且引用了“以前见过的”主题和“尚未出现”的主题。 这些参考文献进行了相应的链接，因此继续阅读其他主题通常不会成为问题。
@@ -154,9 +158,9 @@ Table 4.1 API规则
 | --- | --- | --- | --- | --- |
 | PC端网页| 本机扫码支付| 网站标题-产品说明 | Tencent recharge center—QQ member recharging | |
 | 微信浏览器 | 公众号支付 | 商品名称-产品类别 | Dangdang-Books | |
-| 店家二维码 | 公众号支付 | 商店名称-产品类别 | Southern store-Super market | 线下超时支付 |
-| 店家二维码 | 本机扫码支付 | 商店名称-产品类别 | Southern store-Super market | 线下超时支付 |
-| 店家扫付款码 | 付款码支付 | 商店名称-产品类别 | Southern store-Super market | 线下超时支付 |
+| 店家二维码 | 公众号支付 | 商店名称-产品类别 | Southern store-Super market | 线下商店支付 |
+| 店家二维码 | 本机扫码支付 | 商店名称-产品类别 | Southern store-Super market | 线下商店支付 |
+| 店家扫付款码 | 付款码支付 | 商店名称-产品类别 | Southern store-Super market | 线下商店支付 |
 | 第三方移动浏览器 | H5支付 | 移动网站标题-产品说明 | Tencent recharge center—QQ member recharging | |
 | 第三方APP | App支付 | App名称-产品说明 | Cool Running-Recharging | |
  
@@ -397,3 +401,8 @@ pass
 
 ##### 7. 公众号付款
 1. 使用案例
+pass
+
+##### 8. App付款
+
+##### 1) 使用案例
