@@ -416,7 +416,6 @@ pass
 # 8. App付款
 
 ## 1. 使用案例
-### 1.使用案例
 > 此方法适用于商户将其集成到移动App中的微信支付。
 >
 > 商户的App调用微信提供的SDK来使用微信支付模块，然后重定向到微信以支付交易。完成交易后，微信会重新打开商户的App，并显示包含付款结果的页面。
@@ -442,10 +441,10 @@ pass
 <img title="8.4" src="https://cdn.firstlinkapp.com/real/i_pic/20191212/c8af37dd-5bad-4263-9a2a-ad9e2e96e164.png" width="30%">
 <img title="8.5" src="https://cdn.firstlinkapp.com/real/i_pic/20191212/521ab94a-94c7-44a1-8838-64f0a69aef6c.png" width="30%">
 
-### 2.商户案例
+## 2.商户案例
 > 京东和易迅App现在支持此付款方式。
 
-### 3.服务流程
+## 3.服务流程
 > 下面说明了这种付款方式。 统一订单API，查询订单API和接受订单通知需要签名，这些签名是在供应商的服务后端创建的，如图8.6所示。
  
 ![8.6](https://cdn.firstlinkapp.com/real/i_pic/20191212/b6d2d341-68a8-4f50-b3d4-5302d057529f.png)
@@ -466,11 +465,11 @@ pass
 >
 >步骤6：商户后端查询付款结果。有关更多信息，请参见第9.2节【Query Order】
 
-### 4. 了解更多关于此API
+## 4. 了解更多关于此API
 
 [https://open.weixin.qq.com/zh_CN/htmledition/res/dev/document/sdk/ios/index.html](https://open.weixin.qq.com/zh_CN/htmledition/res/dev/document/sdk/ios/index.html)
 
-### 5. 从APP调用付款API
+## 5. 从APP调用付款API
 > 关于App开发流程，请参考8.6节
 
 从APP调用付款API
@@ -493,25 +492,25 @@ pass
 | -1 | 支付错误 | 可能原因：sign错误， 未注册appid, 不正确的项目appid, 已注册的appid未匹配等等 |
 | -2 | 支付取消 | 不需要解决，用户放弃付款等原因 |
 
-### 6. 基于App的开发指南
+## 6. 基于App的开发指南
  
-#### 1 iOS介绍
+### 1 iOS介绍
 > 我们将用Xcode10.0运行iOS7.0环境为例来说明该过程。
 
-##### 1）APPID项目设置
+#### 1）APPID项目设置
 
 > 商户在微信开放平台上成功申请应用后，该平台将向商户提供唯一的APPID。 使用Xcode创建项目时，开发人员应在"URL Schemes"字段中输入APPID值，如图8.7中红色标记所示。
 
 ![8.7](https://cdn.firstlinkapp.com/real/i_pic/20191212/e458e271-66a8-465c-9a09-d0b9f5491619.png)
 
-##### 2）APPID注册
+#### 2）APPID注册
 
 > 微信SDK的"lib"和"head"文件应导入到Xcode项目。 在调用API之前，您应该在微信上注册APPID，如下所示：
 ```text
 [WXApi registerApp:@"wxd930ea5d5a258f4f" withDescription:@"demo 2.0"];
 ```
 
-##### 3）调用支付
+#### 3）调用支付
 
 > 商户的服务器调用Unified Order API（有关更多信息，请参见第9.1节"统一订单"）来创建预付款交易。在获得prepay_id并加签相关参数后，将预付款交易数据传输到App以开始付款。 请参阅以下示例，了解如何执行此操作：
 ```text
@@ -525,4 +524,8 @@ request.sign= @"582282d72dd2b03ad892830965f428cb16e7a256";
 [WXApi safeSendReq:request];
 ```
 
-##### 4）支付结果回调
+#### 4）支付结果回调
+todo
+
+# 9. 公共API
+ todo
