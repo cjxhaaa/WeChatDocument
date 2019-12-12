@@ -103,12 +103,12 @@ Table 3.1 账号参数
 | API Key | key | 此密钥是为交易签名而创建的，并保留在商户的后端和微信支付系统中，不应公开或在互联网上使用。 商户应保持此密钥的安全，并避免将其泄露给他人。 商户可以根据电子邮件说明配置密钥。
 | Appsecret | secret | AppSecret是与APPID对应的API密码，用于获取用于调用API access_token的证书（access_token）。使用微信支付时，您应该通过OAuth2.0接口获得一个OpenID，并将其用于公众号支付的单个接口中。开发人员应具备在开发模式下获得AppSecret的资格。
  
-# 4. API规则
+# 4. API规范
 
-## 1. 协议规则
+## 1. 协议规范
 > 以下是商户访问微信支付时调用的API规则
 
-Table 4.1 API规则
+Table 4.1 API规范
 
  
 | 名称 | 说明 |
@@ -122,7 +122,7 @@ Table 4.1 API规则
 | 证书要求 | 调用提交退款API或撤销订单API都需要商户证书 |
 | 逻辑判断 | 要确定协议字段，服务字段和事务状态。|
  
-## 2. 参数规则
+## 2. 参数规范
 ### 1) 支付金额
 > 默认情况下，交易的货币为CNY（人民币）。付款金额使用的单位是【分】，必须是整数。但是下载交易记录时，交易金额使用单位【元】。对于国外交易，交易金额将使用最小的货币单位，但参考值必须是不带小数的整数。 例如，使用货币类型“美元”，付款金额中的参考值“1750”将等于17.50美元。
 ### 2) 货币种类
@@ -251,7 +251,7 @@ Table 4.2: Certificate Description
 #### 3) 商户证书安全
 > 证书文件不应存储在Web服务器上的虚拟目录中。相反，应将它们放置在具有严格访问控制权限的目录中，以避免他人下载证书。供应商的服务器也应该没有病毒和木马，以免证书被盗。
  
-4. 商户回调API安全
+#### 4) 商户回调API安全
 > 大部分网络环境中，HTTP请求承担这DNS欺骗，非法弹出以及数据窃取的风险。供应商的回调API应该使用HTTPS以确保数据传输的安全性。 因此，我们建议所有供应商将HTTPS用于所有微信支付回调。 有关更多信息，请参见[HTTPS构建指南](https://pay.weixin.qq.com/wiki/doc/api/micropay.php?chapter=10_4)
  
 ### 4 获取OpenID
@@ -293,7 +293,7 @@ Table 4.2: Certificate Description
 * 对于低于1000元的交易，每个微信账号允许5次免密交易，超过限制需要密码验证
 * 对于任何可信或者可疑的交易都需要验证密码
 
-## 3. 正在参与的商户
+## 3. 商户案例
 > 用户可以在支持微信支付的商店和商店中亲自体验这种支付方式。便利店：7-11，Guoda36524，Hi-24等连锁药店：LBX药房，国大药店，海王星药店等。百货公司：彩虹等。
  
 ## 4. 商户流程
@@ -410,9 +410,119 @@ pass
 pass
 
 # 7. 公众号付款
-1. 使用案例
+##1. 使用案例
 pass
 
-<h1 id="8" >8. App付款</h1>
+# 8. App付款
 
 ## 1. 使用案例
+### 1.使用案例
+> 此方法适用于商户将其集成到移动App中的微信支付。
+>
+> 商户的App调用微信提供的SDK来使用微信支付模块，然后重定向到微信以支付交易。完成交易后，微信会重新打开商户的App，并显示包含付款结果的页面。
+>
+> 目前，微信支持iOS，Android和Windows Phone。
+>
+> 详细步骤如下：
+>
+> 步骤1：付款人进入供应商的App，选择产品并确认交易以继续付款。商户的服务后端创建一个付款订单并对其进行签名，然后相关数据被传输到商户的App，如图8.1所示。
+>
+> 步骤2：付款人单击确认付款，并在微信中打开付款页面来支付订单，如图8.2所示。
+>
+> 步骤3：付款人确认收款人和金额，然后单击付款。然后显示一个页面，提示付款人输入他们的付款密码。付款人可以选择使用银行卡或通过余额付款，如图8.3所示。
+ 
+<img title="8.1" src="https://cdn.firstlinkapp.com/real/i_pic/20191212/d13f7983-447d-433d-a737-7846eaec539c.png" width="30%">
+<img title="8.2" src="https://cdn.firstlinkapp.com/real/i_pic/20191212/e43bdc99-6a8a-42db-945c-f8e9c041f915.png" width="30%">
+<img title="8.3" src="https://cdn.firstlinkapp.com/real/i_pic/20191212/a10c4487-55a5-4c8a-aaec-2b4f4ef64ca2.png" width="30%">
+
+> 步骤4：付款人输入其付款密码完成交易。如果支付成功，则在支付者的微信中会显示一个包含支付结果的页面，如图8.4所示。
+>
+> 步骤5：页面重新打开供应商的应用程序，该应用程序将根据付款结果显示订单处理结果。
+
+<img title="8.4" src="https://cdn.firstlinkapp.com/real/i_pic/20191212/c8af37dd-5bad-4263-9a2a-ad9e2e96e164.png" width="30%">
+<img title="8.5" src="https://cdn.firstlinkapp.com/real/i_pic/20191212/521ab94a-94c7-44a1-8838-64f0a69aef6c.png" width="30%">
+
+### 2.商户案例
+> 京东和易迅App现在支持此付款方式。
+
+### 3.服务流程
+> 下面说明了这种付款方式。 统一订单API，查询订单API和接受订单通知需要签名，这些签名是在供应商的服务后端创建的，如图8.6所示。
+ 
+![8.6](https://cdn.firstlinkapp.com/real/i_pic/20191212/b6d2d341-68a8-4f50-b3d4-5302d057529f.png)
+
+> 下面显示了商户后端如何与微信支付系统进行交互：
+>
+>步骤1：付款人在商户的App中选择产品，提交订单，然后选择微信支付。
+>
+>步骤2：商户收到付款人的付款交易，并调用统一订单API。有关更多信息，请参见第9.1节【Unified Order】。
+>
+>步骤3：Unified Order API返回正常的prepay_id，并根据签名规则。相关数据将传输到商户App。签名中包含的字段包括cappId，partnerId，prepayId，nonceStr，timeStamp和package。
+ 
+**注意：字段格式为Sign = WXPay**
+
+>步骤4：商户App使用SDK在微信中打开微信支付。有关更多信息，请参见第8.5节【App-based Development Guide】。
+>
+>步骤5：商户后端接收付款通知。有关更多信息，请参见第9.7节【General Payment Result Notification】。
+>
+>步骤6：商户后端查询付款结果。有关更多信息，请参见第9.2节【Query Order】
+
+### 4. 了解更多关于此API
+
+[https://open.weixin.qq.com/zh_CN/htmledition/res/dev/document/sdk/ios/index.html](https://open.weixin.qq.com/zh_CN/htmledition/res/dev/document/sdk/ios/index.html)
+
+### 5. 从APP调用付款API
+> 关于App开发流程，请参考8.6节
+
+从APP调用付款API
+ 
+| 字段名 | ID | 必要性 | 类型 | 例子 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| App应用程序ID | appid | 是 | String(32) | wx8888888888888888 | 商户在微信开放平台上注册了自己的APP后，将发放此ID。|
+| 商户ID | partnerid | 是 | String(32)| 1900000109 | 微信支付分配的指定商户ID |
+| 预付交易ID | prepayid | 是 | String(32) | WX1217752501201407033233368018 | 统一订单API返回的指定参数值(prepay_id)|
+| 订单扩充字符串 | package | 是 | String(128) | Sign=WXPay | 指定静态值Sign=WXPay | 
+| 随机字符串 | noncestr | 是 | String(32) | 5K8264ILTKCH16CQ2502SI8ZNMTM67VS | 32位字符或更少。更多信息见4.4.2节 随机字符串算法 |
+| 时间戳 | timestamp | 是 | String(10) | 1414561699 | 指定当前时间。更多信息见4.2节 参数规范 |
+| 签名 | sign | 是 | String(32) | C380BEC2BFD727A4B6845133519F3AD6 | 指定一个签名。更多信息见4.4.1 签名算法 |
+ 
+返回的数据：
+ 
+| 返回值 | 说明 | 解释 |
+| --- | --- | --- |
+| 0 | 支付成功 | 展示付款成功页面 |
+| -1 | 支付错误 | 可能原因：sign错误， 未注册appid, 不正确的项目appid, 已注册的appid未匹配等等 |
+| -2 | 支付取消 | 不需要解决，用户放弃付款等原因 |
+
+### 6. 基于App的开发指南
+ 
+#### 1 iOS介绍
+> 我们将用Xcode10.0运行iOS7.0环境为例来说明该过程。
+
+##### 1）APPID项目设置
+
+> 商户在微信开放平台上成功申请应用后，该平台将向商户提供唯一的APPID。 使用Xcode创建项目时，开发人员应在"URL Schemes"字段中输入APPID值，如图8.7中红色标记所示。
+
+![8.7](https://cdn.firstlinkapp.com/real/i_pic/20191212/e458e271-66a8-465c-9a09-d0b9f5491619.png)
+
+##### 2）APPID注册
+
+> 微信SDK的"lib"和"head"文件应导入到Xcode项目。 在调用API之前，您应该在微信上注册APPID，如下所示：
+```text
+[WXApi registerApp:@"wxd930ea5d5a258f4f" withDescription:@"demo 2.0"];
+```
+
+##### 3）调用支付
+
+> 商户的服务器调用Unified Order API（有关更多信息，请参见第9.1节"统一订单"）来创建预付款交易。在获得prepay_id并加签相关参数后，将预付款交易数据传输到App以开始付款。 请参阅以下示例，了解如何执行此操作：
+```text
+PayReq *request = [[[PayReq alloc] init] autorelease]; 
+request.partnerId = @"10000100";
+request.prepayId= @"1101000000140415649af9fc314aa427"; 
+request.package = @"Sign=WXPay";
+request.nonceStr= @"a462b76e7436e98e0ed6e13c64b4fd1c"; 
+request.timeStamp= @"1397527777";
+request.sign= @"582282d72dd2b03ad892830965f428cb16e7a256"; 
+[WXApi safeSendReq:request];
+```
+
+##### 4）支付结果回调
