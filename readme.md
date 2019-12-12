@@ -1,7 +1,7 @@
 [1.关于文档](#user-content-1-关于文档)<br>
 [2.文档术语](#user-content-2-文档术语)<br>
 [3.支付账号](#user-content-3-支付账号)<br>
-[4.API规则](#user-content-4-API规则)<br>
+[4.API规则](#user-content-4-api规则)<br>
 [5.付款码付款编程指南](#user-content-5-付款码付款编程指南)<br>
 [6.本机扫码支付编程指南](#user-content-6-本机扫码支付编程指南)<br>
 [7.公众号付款](#user-content-7-公众号付款)<br>
