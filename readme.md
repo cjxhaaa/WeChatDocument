@@ -6,6 +6,7 @@
 [6.本机扫码支付编程指南](#user-content-6-本机扫码支付编程指南)<br>
 [7.公众号付款](#user-content-7-公众号付款)<br>
 [8.App付款](#user-content-8-app付款)<br>
+[8.公共API](#user-content-9-公共api)<br>
 
 
 # 1. 关于文档
