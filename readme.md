@@ -2,9 +2,9 @@
 [2.文档术语](#user-content-2-文档术语)<br>
 [3.支付账号](#user-content-3-支付账号)<br>
 [4.API规则](#user-content-4-api规则)<br>
-[5.付款码付款编程指南](#user-content-5-付款码付款编程指南)<br>
-[6.本机扫码支付编程指南](#user-content-6-本机扫码支付编程指南)<br>
-[7.公众号付款](#user-content-7-公众号付款)<br>
+[5.快速付款编程指南(不全)](#user-content-5-快速付款编程指南)<br>
+[6.本机扫码支付编程指南(无)](#user-content-6-本机扫码支付编程指南)<br>
+[7.公众号付款(无)](#user-content-7-公众号付款)<br>
 [8.App付款](#user-content-8-app付款)<br>
 [8.公共API](#user-content-9-公共api)<br>
 
@@ -17,9 +17,9 @@
 
 ## 1.付款方式
 
-### 1) 付款码支付(Quick Pay)
+### 1) 快速支付(Quick Pay)
 
-> 商家扫描付款人微信“付款码付款”页面上的条形码或二维码，直接付款。此模式适用于离线支付场景。
+> 商家扫描付款人微信"付款码付款"页面上的条形码或二维码，直接付款。此模式适用于离线支付场景。
  
 ### 2) 扫码支付(Native Pay)
  
@@ -29,9 +29,9 @@
  
 > 付款人在其微信上打开商户H5页面，并通过JSAPI接口调用微信支付模块进行交易支付。 该模式适用于以下场景：
 
-* 付款人输入商户的公众号交易付款
-* 付款人根据朋友分享商户的付款链接交易付款
-* 付款人扫描商户付款二维码交易付款
+* 在交易页面上付款人输入商户的公众号付款
+* 付款人根据朋友分享商户的付款链接付款
+* 付款人扫描商户付款二维码付款
 
 ### 4) App付款(In-App Payment)
  
@@ -121,7 +121,7 @@ Table 4.1 API规范
 | 签名算法 | MD5 或 HMAC-SHA256|
 | 签名要求 | 请求签名和接收数据需要签名检查。更多信息，参见4.3.1节签名算法 |
 | 证书要求 | 调用提交退款API或撤销订单API都需要商户证书 |
-| 逻辑判断 | 要确定协议字段，服务字段和事务状态。|
+| 逻辑判断 | 要确定协议字段，服务字段和交易状态。|
  
 ## 2. 参数规范
 ### 1) 支付金额
@@ -145,9 +145,9 @@ Table 4.1 API规范
 
 > 注意：付款和退款的货币类型必须相同。
 
-### 3) 时间约定
+### 3) 时间协议
 
-> 本文档中使用中国标准时间（UTC + 08）。如果商户不在该时区，则应将其当前时间转换为中国标准时间。例如，如果某个商户在当地时间2014年11月11日0:00在伦敦，那么它将在2014年11月11日8:00AM在北京。
+> 本文档中使用中国标准时间（UTC+08）。如果商户不在该时区，则应将其当前时间转换为中国标准时间。例如，如果某个商户在当地时间2014年11月11日0:00在伦敦，那么它将在2014年11月11日8:00AM在北京。
 
 ### 4) 时间戳
 
@@ -167,7 +167,7 @@ Table 4.1 API规范
 | 微信浏览器 | 公众号支付 | 商品名称-产品类别 | Dangdang-Books | |
 | 店家二维码 | 公众号支付 | 商店名称-产品类别 | Southern store-Super market | 线下商店支付 |
 | 店家二维码 | 本机扫码支付 | 商店名称-产品类别 | Southern store-Super market | 线下商店支付 |
-| 店家扫付款码 | 付款码支付 | 商店名称-产品类别 | Southern store-Super market | 线下商店支付 |
+| 店家扫付款码 | 快速支付 | 商店名称-产品类别 | Southern store-Super market | 线下商店支付 |
 | 第三方移动浏览器 | H5支付 | 移动网站标题-产品说明 | Tencent recharge center—QQ member recharging | |
 | 第三方APP | App支付 | App名称-产品说明 | Cool Running-Recharging | |
  
@@ -234,7 +234,7 @@ sign=MD5(stringSignTemp).toUpperCase()="9A0A8659F005D6984697E2CA0A9CF3B7"
  
 Table 4.2: Certificate Description
  
-| 证书附件 | 说明 | 使用案例 | 备注 |
+| 证书附件 | 说明 | 用例 | 备注 |
 | --- | --- | --- | --- |
 | pkcs12格式(apiclient_cert.p12)| 包含p12(pfx)格式的私钥信息证书，并由微信支付签发以进行身份验证 | 调用撤销订单API和提交退款API | 双击以导入Windows系统，并根据提示输入证书密码。 默认情况下，证书密码是供应商的ID（例如10010000）|
 | pem格式证书(apiclient_cert.pem) | 可以导入apiclient_cert.p12证书文件来创建pem格式的证书。不要向他人透露哦~ | pem格式应用于PHP应用程序，因为PHP不能使用p12格式 | 您还可以使用“ openssl”命令来导入p12格式的证书，如下所示：openssl pkcs12 -clcerts-nokeys -in apiclient_cert.p12-out apiclient_cert.pem |
@@ -275,8 +275,8 @@ Table 4.2: Certificate Description
  
 网站应用可以使用下面的API来获取用户OpenID： [https://open.weixin.qq.com/cgibin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419316505&token=&lang=zh_CN](https://open.weixin.qq.com/cgibin/showdocument?action=dir_list&t=resource/res_list&verify=1&id=open1419316505&token=&lang=zh_CN)
 
-# 5. 付款码付款编程指南
-## 1. 使用案例
+# 5. 快速付款编程指南
+## 1. 用例
 > 步骤1：登录微信后，付款人在“我”->“钱包”中进入"付款码支付"，如图5.1
 >
 > 步骤2：收银员创建交易订单，付款人确认在销售点终端上显示的付款金额；
@@ -329,7 +329,7 @@ Table 4.2: Certificate Description
 > 
 > 5. 收到支付信息后，收营员向商户后端发起付款请求
 > 
-> 6. 商户后端处理实体店销售终端的付款请求，创建签名，然后调用【Submit Quick Pay API】向微信付款系统发起付款请求
+> 6. 商户后端处理实体店销售终端的付款请求，创建签名，然后调用【提交快速付款 API】向微信付款系统发起付款请求
 > 
 > 7. 微信付款系统收到商户支付请求，验证后处理数据，并将支付结果返回给商户后端。 如果交易成功支付， 微信付款系统会给商户发送付款结果, 同时付款人也会收到短信或微信消息。
 > 
@@ -338,8 +338,8 @@ Table 4.2: Certificate Description
 > 9. 确认付款成功后收营员将商品交付给付款人
 
 ### 4 密码支付流程
-> 密码支付流程和免密支付流程很相似，第1到5步是相同的。 在密码支付流程中，在商户后台调用【Submit Quick Pay API】发起付款请求后， 微信后台会提示付款人输入支付密码。
-> 付款人成功验证支付密码后，API会立刻返回USERPAYING状态给商户后端，并且商户后台会与微信付款系统【Query Order API】通信来确认订单是否已经支付成功。
+> 密码支付流程和免密支付流程很相似，第1到5步是相同的。 在密码支付流程中，在商户后台调用【提交快速付款 API】发起付款请求后， 微信后台会提示付款人输入支付密码。
+> 付款人成功验证支付密码后，API会立刻返回USERPAYING状态给商户后端，并且商户后台会与微信付款系统【查询下单 API】通信来确认订单是否已经支付成功。
  
 密码支付流程如下图所示：
  
@@ -348,7 +348,7 @@ Table 4.2: Certificate Description
 这里只说明一下与先前不同的步骤：
 > 1.收银员的销售终端在创建订单后向商户的后端发起付款请求；
 >
-> 2. 商户后端调用'Submit Quick Pay API'来创建付款交易
+> 2. 商户后端调用【提交快速付款 API】来创建付款交易
 > 
 > 3. 微信支付系统验证商户的请求并确定是否需要验证密码
 > 
@@ -362,61 +362,61 @@ Table 4.2: Certificate Description
 > 
 > 8. 付款人在微信上完成交易后微信支付后端返回支付结果并通过短信或微信通知付款人结果
 > 
-> 9. 供应商的后端从微信支付系统接收USERPAYING状态，并通过【Query Order API】查询实际支付结果（更多信息，请参见公共API）。
+> 9. 供应商的后端从微信支付系统接收USERPAYING状态，并通过【查询下单 API】查询实际支付结果（更多信息，请参见公共API）。
 > 
-> 10. 如果微信支付系统返回的是USERPAYING状态状态，商户后台应该每隔5秒调用【Query Order API】来确认最终付款状态。如果付款人取消付款或延迟付款超过30秒，
->商户后台应暂停轮询过程，并滴啊用【Revoke Order API】取消交易。
+> 10. 如果微信支付系统返回的是USERPAYING状态状态，商户后台应该每隔5秒调用【查询下单 API】来确认最终付款状态。如果付款人取消付款或延迟付款超过30秒，
+>商户后台应暂停轮询过程，并调用【取消下单 API】取消交易。
 
 ### 5 异常处理
  
 请按照以下说明来排除付款异常:
 > 1. 当付款人微信上提示付款错误时，如果付款人在交易历史中找不到他们的订单，他们可以要求商户再次生成订单。只要订单已经成功付款，那么商户后台再次调
->用【Query Order API】可以查询到订单实际付款状态。
+>用【查询下单 API】可以查询到订单实际付款状态。
 > 
 > 2. 如果被提示余额不足或者卡失效等付款错误，付款人就需要重新支付。
 > 
-> 3. 无论是交易超时或者付款失败，商户后台都应该调用【Revoke Order API】来取消交易
+> 3. 无论是交易超时或者付款失败，商户后台都应该调用【取消下单 API】来取消交易
 >
 > 4. 由异常银行系统错误，余额不足，银行不受支持或任何其他原因导致的错误消息， 商户后端也应该将其发送到收银员的销售终端。
 >
 > 5. 依据错误码的返回类型，交易可能会被取消。详情见API返回错误码列表
 
-## 5. 提交Quick Pay API
+## 5. 提交快速付款 API
 
 pass
 
  
-## 6. 请求订单 API
-> 更多信息见【Section 9.2 Query Order】
+## 6. 查询下单 API
+> 更多信息见【9.2 查询下单】
 
 ## 7. 提交退款 API
-> 更多信息见【Section 9.4 Submit Refund】
+> 更多信息见【9.4 提交退款】
 
-## 8. 请求退款 API
-> 更多信息见【Section 9.5 Query Refund】
+## 8. 查询退款 API
+> 更多信息见【9.5 查询退款】
 
-## 9. 撤销订单API
+## 9. 取消下单API
 pass
 
 ## 10. 下载对账文件API
-> 更多信息见【Section 9.6 Download Reconciliation File】
+> 更多信息见【9.6 下载对账文件】
 
 ## 11. 报告速度测试
 
-> 为了改善我们的付款服务，我们建议供应商通过Report Speed Testing API向WeChat付款后端报告付款界面延迟。 有关更多信息，请参见【Section 9.8 Report Speed Testing API】.。
+> 为了改善我们的付款服务，我们建议供应商通过【报告速度测试 API】向WeChat付款后端报告付款界面延迟。 有关更多信息，请参见【9.8 报告速度测试 API】.。
  
 # 6. 本机扫码支付编程指南
 
-## 1. 使用案例
+## 1. 用例
 pass
 
 # 7. 公众号付款
-##1. 使用案例
+##1. 用例
 pass
 
 # 8. App付款
 
-## 1. 使用案例
+## 1. 用例
 > 此方法适用于商户将其集成到移动App中的微信支付。
 >
 > 商户的App调用微信提供的SDK来使用微信支付模块，然后重定向到微信以支付交易。完成交易后，微信会重新打开商户的App，并显示包含付款结果的页面。
@@ -446,7 +446,7 @@ pass
 > 京东和易迅App现在支持此付款方式。
 
 ## 3.服务流程
-> 下面说明了这种付款方式。 统一订单API，查询订单API和接受订单通知需要签名，这些签名是在供应商的服务后端创建的，如图8.6所示。
+> 下面说明了这种付款方式。 统一下单API，查询订单API和接受订单通知需要签名，这些签名是在供应商的服务后端创建的，如图8.6所示。
  
 ![8.6](https://cdn.firstlinkapp.com/real/i_pic/20191212/b6d2d341-68a8-4f50-b3d4-5302d057529f.png)
 
@@ -454,9 +454,9 @@ pass
 >
 >步骤1：付款人在商户的App中选择产品，提交订单，然后选择微信支付。
 >
->步骤2：商户收到付款人的付款交易，并调用统一订单API。有关更多信息，请参见第9.1节【Unified Order】。
+>步骤2：商户收到付款人的付款交易，并调用统一下单API。有关更多信息，请参见第9.1节【Unified Order】。
 >
->步骤3：Unified Order API返回正常的prepay_id，并根据签名规则。相关数据将传输到商户App。签名中包含的字段包括cappId，partnerId，prepayId，nonceStr，timeStamp和package。
+>步骤3：统一下单 API返回正常的prepay_id，并根据签名规则。相关数据将传输到商户App。签名中包含的字段包括cappId，partnerId，prepayId，nonceStr，timeStamp和package。
  
 **注意：字段格式为Sign = WXPay**
 
@@ -478,16 +478,16 @@ pass
 | 字段名 | ID | 必要性 | 类型 | 例子 | 说明 |
 | --- | --- | --- | --- | --- | --- |
 | App应用程序ID | appid | 是 | String(32) | wx8888888888888888 | 商户在微信开放平台上注册了自己的APP后，将发放此ID。|
-| 商户ID | partnerid | 是 | String(32)| 1900000109 | 微信支付分配的指定商户ID |
-| 预付交易ID | prepayid | 是 | String(32) | WX1217752501201407033233368018 | 统一订单API返回的指定参数值(prepay_id)|
-| 订单扩充字符串 | package | 是 | String(128) | Sign=WXPay | 指定静态值Sign=WXPay | 
-| 随机字符串 | noncestr | 是 | String(32) | 5K8264ILTKCH16CQ2502SI8ZNMTM67VS | 32位字符或更少。更多信息见4.4.2节 随机字符串算法 |
-| 时间戳 | timestamp | 是 | String(10) | 1414561699 | 指定当前时间。更多信息见4.2节 参数规范 |
-| 签名 | sign | 是 | String(32) | C380BEC2BFD727A4B6845133519F3AD6 | 指定一个签名。更多信息见4.4.1 签名算法 |
+| 商户ID | partnerid | 是 | String(32)| 1900000109 | 微信支付分配的对应商户ID |
+| 预付交易ID | prepayid | 是 | String(32) | WX1217752501201407033233368018 | 统一下单API返回的对应参数值(prepay_id)|
+| 订单扩充字符串 | package | 是 | String(128) | Sign=WXPay | 对应静态值Sign=WXPay | 
+| 随机字符串 | noncestr | 是 | String(32) | 5K8264ILTKCH16CQ2502SI8ZNMTM67VS | 最多32位字符。更多信息见4.4.2节 随机字符串算法 |
+| 时间戳 | timestamp | 是 | String(10) | 1414561699 | 对应当前时间。更多信息见4.2节 参数规范 |
+| 签名 | sign | 是 | String(32) | C380BEC2BFD727A4B6845133519F3AD6 | 对应签名。更多信息见4.4.1 签名算法 |
  
 返回的数据：
  
-| 返回值 | 说明 | 解释 |
+| 返回值 | 说明 | 解答 |
 | --- | --- | --- |
 | 0 | 支付成功 | 展示付款成功页面 |
 | -1 | 支付错误 | 可能原因：sign错误， 未注册appid, 不正确的项目appid, 已注册的appid未匹配等等 |
@@ -513,7 +513,7 @@ pass
 
 #### 3）调用支付
 
-> 商户的服务器调用Unified Order API（有关更多信息，请参见第9.1节"统一订单"）来创建预付款交易。在获得prepay_id并加签相关参数后，将预付款交易数据传输到App以开始付款。 请参阅以下示例，了解如何执行此操作：
+> 商户的服务器调用Unified Order API（有关更多信息，请参见第9.1节"统一下单"）来创建预付款交易。在获得prepay_id并加签相关参数后，将预付款交易数据传输到App以开始付款。 请参阅以下示例，了解如何执行此操作：
 ```text
 PayReq *request = [[[PayReq alloc] init] autorelease]; 
 request.partnerId = @"10000100";
@@ -529,4 +529,457 @@ request.sign= @"582282d72dd2b03ad892830965f428cb16e7a256";
 todo
 
 # 9. 公共API
- todo
+> 公共API就是被调用以访问各种补充功能的通用API接口。商户可以根据需要选择集成这些功能。公共API包括统一下单，一般通知，查询订单，关闭订单，提交退款，退款查询，下载对帐文件和短URL转换功能，这些功能将在以下小节中详细介绍。
+
+## 1. 统一下单
+
+### 1 用例
+> 对于除"快速付款"方法以外的方案，供应商后端调用此API在微信支付服务后端创建预付款交易，并通过二维码付款来启动付款流程。成功提交订单后，接着是JSAPI，App和其他付款方式。
+
+### 2 URL
+> URL: [https://api.mch.weixin.qq.com/pay/unifiedorder](https://api.mch.weixin.qq.com/pay/unifiedorder)
+ 
+### 3 证书要求
+> 不需要
+
+### 4 请求参数
+ 
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 公众号ID | appid | 是 | String(32) |  wx8888888888888888 | 对应微信分配的公众号ID |
+| 商户ID | mch_id | 是 | String(32) | 1900000109 | 对应微信付款分配的商户ID |
+| 设备ID | device_info | 否 | String(32) | 013467007045764 | 对应微信付款分配的终端设备ID。这个字段是商户自定的。注意：如果付款基于PC网页或微信web页执行，该字段值填WEB | 
+| 随机字符串 | nonce_str | 是 | String(32) | 5K8264ILTKCH16CQ2502SI8ZNMTM67VS | 最多32位字符。更多信息见4.4.2节随机字符串算法 |
+| 签名 | sign | 是 | String(32) |  C380BEC2BFD727A4B6845133519F3AD6 | 对应签名。更多信息见4.4.1 签名算法 |
+| 签名类型 | sign_type | 否 | String(32) | HMAC-SHA256 | 当前支持HMAC-SHA256和MD5,默认为MD5。这个字段其实只有加签类型为HMAC-SHA256时才需要 |
+| 项目描述 | body | 是 | String(32) | iPad Mini in white with 16G memory | 付款人购买项目的简短说明，请参考4.2.6节 |
+| 项目明细 | detail | 否 | String(6000) | {"goods_detail":[{"goods_id":"iphone6s_16G","wxpay_goods_id":"1001","goods_name":"iP hone6s 16G","goods_num":1,"price":528800,"goods_category":"123456","body":"苹果手机"},{"goods_id":"iphon e6s_32G","wxpay_goods_id":"1002","goods_name":"iP hone6s 32G","quantity":1,"price":608800, "goods_category": "123789", "body":"苹果手机" }]} | JSON格式的详细的产品列表说明。生成签名时，请使用CDATA标记保护json字符串。wxpay_goods_id 可选微信设定的统一商品ID。注意：商品总价格不应该高于字段total_fee值且应该为优惠后价格 |
+| 附加数据 | attach | 否 | String(128) | 附加说明 | 向查询下单API提交付款后，允许商户在付款通知中返回的附加字段 |
+| 商户订单号 | out_trade_no | 是 | String(32) | 1217752501201407033233368018 | 最多32位字符数字。更多信息见4.2.5节 商户订单号 |
+| 货币类型 | fee_type | 是 | String(16) | GBP | 符合ISO-4217标准，基于3个字符。更多信息见4.2.2节 货币种类 |
+| 总金额 | total_fee | 是 | Int | 888 | 对应订单的总价。单位以分表示必须为整数。更多信息见4.2.1节 支付金额 |
+| 终端IP | spbill_create_ip | 是 | String(16) | 8.8.8.8 | 对于本机快速支付(扫码)对应为调用微信付款API的机器IP。当公众号付款或APP内付款时，对应为客户终端IP |
+| 交易开始时间 | time_start | 否 | String(14) | 20091225091010 | 对应为yyyyMMddHHmmss格式的交易创建时间，如Dec 25, 2009 09:10:10 (UTC+08)就是20091225091010。更多信息见4.2.3 时间协议 |
+| 交易结束时间 | time_expire | 否 | String(14) | 20091227091010 | 格式同交易开始时间，但是最短交易结束时间至少大于交易开始时间5分钟 |
+| 项目标签 | goods_tag | 否 | String(32)| WXG | 对应商品标签，是一个优惠券功能中的参数。详细见第10节 移动优惠券 |
+| 通知URL | notify_url | 是 | String(256)| http://www.baidu.c om/ | 对应接收微信付款通知的回调地址 | 
+| 交易类型 | trade_type | 是 | String(16) | JSAPI | 可设置为JSAPI, NATIVE, 或APP |
+| 产品ID | product_id | 否 | String(32) | 12235413214070356458058 | 仅当trade_type为NATIVE时才需要此字段。此ID包含商户设置的产品ID。|
+| 限制付款方式 | limit_pay | 否 | String(32) | no_credit | no_credit: 不允许使用信用卡付款 |
+| 用户标签 | openid | 否 | String(128) | oUpF8uMuAJO_M2pxb1Q9zNjWeS6o | 仅当trade_type为JSAPI时需要。它是当前appid下的唯一用户身份。关于如何获取openid，请参考[http://admin.wechat.com/wiki/index.php?title=User_Profile_via_Web](http://admin.wechat.com/wiki/index.php?title=User_Profile_via_Web) |
+
+**举例**
+
+```xml
+<xml>
+    <appid>wx2421b1c4370ec43b</appid>
+    <attach>Payment Testing</attach>
+    <body>JSAPI Payment Testing</body>
+    <mch_id>10000100</mch_id> 
+    <nonce_str>1add1a30ac87aa2db72f57a2375d8fec</nonce_str> 
+    <notify_url>http://wxpay.weixin.qq.com/pub_v2/pay/notify.v2.php</notify_url> 
+    <openid>oUpF8uMuAJO_M2pxb1Q9zNjWeS6o</openid> 
+    <out_trade_no>1415659990</out_trade_no> 
+    <spbill_create_ip>14.23.150.211</spbill_create_ip>
+    <total_fee>1</total_fee>
+    <trade_type>JSAPI</trade_type>
+    <sign>0CB01533B8C1EF103065174F50BCA001</sign> 
+</xml>
+```
+ 
+**注意：参数在XML文件中转义，并且使用CDATA标记说明XML的数据为未被XML解析器解析的数据。**
+
+### 5 返回数据
+
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 状态码 | return_code | 是 | String(16) | SUCCESS | SUCCESS或FAIL。这只是个通信标签而非交易标签。交易的状态其实由result_code字段值确定。|
+| 返回数据 | return_msg | 否 | String(128) | Signature failure | 如果非空， 返回的信息都是错误说明，如Signature failure就是参数格式检查错误 |
+ 
+如果return_code为SUCCESS, 返回数据也会包含以下字段：
+ 
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 公众号ID | appid | 是 | String(32) |  wx8888888888888888 | 对应微信分配的公众号ID |
+| 商户ID | mch_id | 是 | String(32) | 1900000109 | 对应微信付款分配的商户ID |
+| 设备ID | device_info | 否 | String(32) | 013467007045764 | 对应微信付款分配的终端设备ID。这个字段是商户自定的。注意：如果付款基于PC网页或微信web页执行，该字段值填WEB | 
+| 随机字符串 | nonce_str | 是 | String(32) | 5K8264ILTKCH16CQ2502SI8ZNMTM67VS | 最多32位字符。更多信息见4.4.2节随机字符串算法 |
+| 签名 | sign | 是 | String(32) |  C380BEC2BFD727A4B6845133519F3AD6 | 对应签名。更多信息见4.4.1 签名算法 |
+| 结果码 | result_code | 是 | String(16) | SUCCESS | SUCCESS 或 FAIL |
+| 错误码 | err_code | 否 | String(32) | SYSTEMERROR | 更多信息见错误码列表 |
+| 错误说明 | err_code_des | 否 | String(128)| System error | 错误数据说明 |
+ 
+如果return_code和result_code都是SUCCESS, 返回数据也会包含以下字段：
+ 
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 交易类型 | trade_type | 是 | String(16) | JSAPI | 可设置为JSAPI, NATIVE, 或APP |
+| 预先交易ID | prepay_id | 是 | String(64) | wx201410272009395522657a690389285100 | 微信创建的预付款交易ID。它用于稍后调用查询下单API。有效期为2小时。|
+| 二维码URL | code_url | 否 | String(64) | URl:weixin://wxpay/ s/An4baqw | 当trade_type为NATIVE时返回该字段。该参数用于创建稍后展示给付款人的二维码 |
+ 
+**举例**
+ 
+```xml
+<xml>
+<return_code><![CDATA[SUCCESS]]></return_code> 
+<return_msg><![CDATA[OK]]></return_msg> 
+<appid><![CDATA[wx2421b1c4370ec43b]]></appid> 
+<mch_id><![CDATA[10000100]]></mch_id> 
+<nonce_str><![CDATA[IITRi8Iabbblz1Jc]]></nonce_str> 
+<sign><![CDATA[7921E432F65EB8ED0CE9755F0E86D72F]]></sign> 
+<result_code><![CDATA[SUCCESS]]></result_code> 
+<prepay_id><![CDATA[wx201411101639507cbf6ffd8b0779950874]]></prepay_id> 
+<trade_type><![CDATA[JSAPI]]></trade_type>
+</xml>
+```
+ 
+### 6 错误码
+ 
+| 名称 | 说明 | 原因 | 解答 |
+| --- | --- | --- | --- |
+| NOAUTH | 商户不允许使用该API | 商户没有该API授权 | 商户应该申请该API权限 |
+| NOTENOUGH | 余额不足 | 付款人支付卡余额不足 | 通知付款人给账户充值或切换支付卡 |
+| ORDERPAID | 订单已付款 | 订单已经支付不需要再次付款了 | 订单已支付，不需要采取进一步措施 |
+| ORDERCLOSED | 订单被关闭 | 当前订单已经关闭无法再次付款 | 当前订单已经关闭了，付款人应被告知创建新订单 |
+| SYSTEMERROR | 系统异常 | 系统超时 | 系统异常，可尝试用同样参数再次调用API |
+| APPID_NOT_EXIST | appid不存在 | 缺少appid参数 | 检查并提供正确的appid |
+| MCHID_NOT_EXIST | mchid不存在 | 缺少mchid参数 | 检查并提供正确的mchid |
+| APPID_MCHID_NOT_MATCH | appid和mchid不匹配 | appid和mchid不匹配 | 检查appid是否属于相关msch_id |
+| LACK_PARAMS | 缺少参数 | 必须的参数缺少 | 检查是否参数都满足了 |
+| OUT_TRADE_NO_USED | 商户订单号重复 | 不能重复提交相同的交易 | 检查商户订单号先前是否已经被提交或使用过 |
+| SIGNERROR | 签名错误 | 不正确的签名结果 | 检查签名参数和方法是否满足签名算法要求 |
+| XML_FORMAT_ERROR | 无效的XML格式 | 无效的XML格式 | 检查XML参数是否组成正确的格式 |
+| REQUIRE_POST_METHOD | 请使用post方法 | 数据没有使用post传输 | 检查数据是否通过POST提交 |
+| POST_DATA_EMPTY | post data为空 | data不能为空 | 检查post data是否为空 |
+| NOT_UTF8 | 无效编码格式 | 没有使用对应编码格式 | 请使用UTF8编码格式 |
+
+## 2. 查询下单
+
+### 1 用例
+
+> 此API允许查询从微信发出的所有付款订单。根据此API接收的状态码，商户才能继续服务逻辑的下一步。以下是使用查询下单API的情形：
+ 
+1. 由于商户后台，网络或服务的异常，商户没有收到任何付款。
+2. 调用支付接口返回了未知交易状态的系统错误。
+3. 调用快速下单API后返回了USERPAYING状态。
+4. 调用关闭订单API和取消下单API前确定支付状态。
+
+### 2 URL
+[https://api.mch.weixin.qq.com/pay/orderquery](https://api.mch.weixin.qq.com/pay/orderquery)
+
+### 3 证书要求
+
+**不需要**
+ 
+### 4 请求参数
+
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 公众号ID | appid | 是 | String(32) |  wx8888888888888888 | 对应微信分配的公众号ID |
+| 商户ID | mch_id | 是 | String(32) | 1900000109 | 对应微信付款分配的商户ID |
+| 微信订单号 | transaction_id | 微信商户选其一 | String(32) | 013467007045764 | 微信订单号优先 |
+| 商户订单号 | out_trade_no | 微信商户选其一 | String(32) | 1217752501201407033233368018 | 对应由供应商的系统创建的内部订单号。未提供transaction_id时，此字段为必填字段。|
+| 随机字符串 | nonce_str | 是 | String(32) | 5K8264ILTKCH16CQ2502SI8ZNMTM67VS | 最多32位字符。更多信息见4.4.2节随机字符串算法 |
+| 签名 | sign | 是 | String(32) |  C380BEC2BFD727A4B6845133519F3AD6 | 对应签名。更多信息见4.4.1 签名算法 |
+| 签名类型 | sign_type | 否 | String(32) | HMAC-SHA256 | 当前支持HMAC-SHA256和MD5,默认为MD5。这个字段其实只有加签类型为HMAC-SHA256时才需要 |
+ 
+**举例**
+ 
+```xml
+<xml>
+    <appid>wx2421b1c4370ec43b</appid> 
+    <mch_id>10000100</mch_id> 
+    <nonce_str>ec2316275641faa3aacf3cc599e8730f</nonce_str> 
+    <transaction_id>1008450740201411110005820873</transaction_id> 
+    <sign>FDD167FAA73459FD921B144BAF4F4CA2</sign>
+</xml>
+```
+
+### 5 返回数据
+
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 状态码 | return_code | 是 | String(16) | SUCCESS | SUCCESS或FAIL。这只是个通信标签而非交易标签。交易的状态其实由result_code字段值确定。|
+| 返回数据 | return_msg | 否 | String(128) | Signature failure | 如果非空， 返回的信息都是错误说明，如Signature failure就是参数格式检查错误 |
+ 
+如果return_code为SUCCESS, 返回数据也会包含以下字段：
+ 
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 公众号ID | appid | 是 | String(32) |  wx8888888888888888 | 对应微信分配的公众号ID |
+| 商户ID | mch_id | 是 | String(32) | 1900000109 | 对应微信付款分配的商户ID |
+| 随机字符串 | nonce_str | 是 | String(32) | 5K8264ILTKCH16CQ2502SI8ZNMTM67VS | 最多32位字符。更多信息见4.4.2节随机字符串算法 |
+| 签名 | sign | 是 | String(32) |  C380BEC2BFD727A4B6845133519F3AD6 | 对应签名。更多信息见4.4.1 签名算法 |
+| 结果码 | result_code | 是 | String(16) | SUCCESS | SUCCESS 或 FAIL |
+| 错误码 | err_code | 否 | String(32) | SYSTEMERROR | 更多信息见错误码列表 |
+| 错误说明 | err_code_des | 否 | String(128)| System error | 错误数据说明 |
+ 
+如果return_code和result_code都是SUCCESS, 返回数据也会包含以下字段：
+ 
+**注意：如果trade_state不为SUCCESS, 则只会返回out_trade_no和attach**
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 设备ID | device_info | 否 | String(32) | 013467007045764 | 对应微信付款分配的终端设备ID。| 
+| 用户标签 | openid | 否 | String(128) | wxd930ea5d5a258f4f | 对应微信系统提供的付款人的用户ID（每个appid实例唯一的OpenID格式） |
+| 是否关注公众号 | is_subscribe | 否 | String(1) | Y | 对应付款人是否关注了关联的公众号，Y表示关注，N表述未关注 |
+| 交易类型 | trade_type | 是 | String(16) | JSAPI | 可设置为JSAPI, NATIVE,MICROPAY. 或APP |
+| 交易状态 | trade_state | 是 | String(32) | SUCCESS | SUCCESS: 付款成功。REFUND：订单将被退款。NOTPAY: 订单未支付。CLOSED: 订单被关闭。REVOKED: 订单被取消。USERPAYING: 等待用户支付。PAYERROR: 支付失败（由于银行或其他原因支付状态返回失败）|
+| 付款银行 | bank_type | 是 | String(16) | CMC | 银行类别字符串 |
+| 总金额 | total_fee | 是 | Int | 888 | 对应订单的总价。单位以分表示必须为整数。更多信息见4.2.1节 支付金额 |
+| 货币类型 | fee_type | 是 | String(16) | GBP | 符合ISO-4217标准，基于3个字符。更多信息见4.2.2节 货币种类 |
+| 现金支付金额 | cash_fee | 是 | Int | 100 | 对应交易的现金总金额。更多信息见4.2.1节 支付金额 |
+| 现金类型 | cash_fee_type | 否 | String(16) | CNY | 符合ISO-4217标准，基于3个字符。更多信息见4.2.2节 货币种类 |
+| 对应微信支付订单号 | transaction_id | 是 | String(32) | 1217752501201407033233368018 | 对应微信支付订单号 |
+| 商户订单号 | out_trade_no | 是 | String(32) | 1217752501201407033233368018 | 由商户系统创建对应订单号码，与下单请求一致 |
+| 商户数据包 | attach | 否 | String(128) | 123456 | 对应商户的数据包，原样返回 |
+| 支付结束时间 | time_end | 是 | String(14) | 20141030133525 | 对应为yyyyMMddHHmmss格式的交易创建时间，如Dec 25, 2009 09:10:10 (UTC+08)就是20091225091010。更多信息见4.2.3 时间协议 | 
+| 汇率 | rate | 是 | String(16) | 650000000 | 该值是外币对人民币汇率的10到8幂次 例如，外币对人民币的汇率为6.5，则价值为650000000, 即6.5*10^8 |
+ 
+**举例：**
+ 
+```xml
+<xml>
+    <return_code><![CDATA[SUCCESS]]></return_code> 
+    <return_msg><![CDATA[OK]]></return_msg> 
+    <appid><![CDATA[wx2421b1c4370ec43b]]></appid> 
+    <mch_id><![CDATA[10000100]]></mch_id> 
+    <device_info><![CDATA[1000]]></device_info> 
+    <nonce_str><![CDATA[TN55wO9Pba5yENl8]]></nonce_str> 
+    <sign><![CDATA[BDF0099C15FF7BC6B1585FBB110AB635]]></sign> 
+    <result_code><![CDATA[SUCCESS]]></result_code> 
+    <openid><![CDATA[oUpF8uN95-Ptaags6E_roPHg7AG0]]></openid>
+    <is_subscribe><![CDATA[Y]]></is_subscribe> 
+    <trade_type><![CDATA[MICROPAY]]></trade_type> 
+    <bank_type><![CDATA[CCB_DEBIT]]></bank_type>
+    <total_fee>1</total_fee>
+    <fee_type><![CDATA[CNY]]></fee_type> 
+    <transaction_id><![CDATA[1008450740201411110005820873]]></transaction_id> 
+    <out_trade_no><![CDATA[1415757673]]></out_trade_no> 
+    <attach><![CDATA[Additional Order description]]></attach> 
+    <time_end><![CDATA[20141111170043]]></time_end> 
+    <trade_state><![CDATA[SUCCESS]]></trade_state>
+</xml>
+```
+
+### 6 错误码
+
+| 名称 | 说明 | 原因 | 解答 |
+| --- | --- | --- | --- |
+| ORDERNOTEXIST | 该订单不存在 | 查询系统不存在改订单号 | 该API仅仅帮助查询支付成功的交易。商户应该检查提供的transaction_id是否正确 |
+| SYSTEMERROR | 系统错误 | 数据从后端返回发生异常 | 这种系统异常重试就好了 |
+
+## 3. 关闭订单
+
+### 1. 用例
+
+> 因为付款人无法为订单付款，商户在创建新订单之前必须调用该API。为了避免重复付款，原订单将被关闭。微信支付系统创建订单后，如果付款人未在规定时间内付款，就无法在系统中执行进一步操作。为了防止付款人继续下单，就调用此API来关闭订单。
+ 
+**注意：关闭订单API在创建订单5分钟后才能使用**
+
+### 2. URL
+
+[https://api.mch.weixin.qq.com/pay/closeorder](https://api.mch.weixin.qq.com/pay/closeorder)
+
+### 3. 证书要求
+
+无
+
+### 4. 请求参数
+
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 公众号ID | appid | 是 | String(32) |  wx8888888888888888 | 对应微信分配的公众号ID |
+| 商户ID | mch_id | 是 | String(32) | 1900000109 | 对应微信付款分配的商户ID |
+| 商户订单号 | out_trade_no | | 微信商户选其一 | 1217752501201407033233368018 | 对应由商户系统创建的内部订单号。未提供transaction_id时，此字段为必填字段。|
+| 随机字符串 | nonce_str | 是 | String(32) | 5K8264ILTKCH16CQ2502SI8ZNMTM67VS | 最多32位字符。更多信息见4.4.2节随机字符串算法 |
+| 签名 | sign | 是 | String(32) |  C380BEC2BFD727A4B6845133519F3AD6 | 对应签名。更多信息见4.4.1 签名算法 |
+| 签名类型 | sign_type | 否 | String(32) | HMAC-SHA256 | 当前支持HMAC-SHA256和MD5,默认为MD5。这个字段其实只有加签类型为HMAC-SHA256时才需要 |
+
+```xml
+<xml>
+    <appid>wx2421b1c4370ec43b</appid> 
+    <mch_id>10000100</mch_id> 
+    <nonce_str>ec2316275641faa3aacf3cc599e8730f</nonce_str> 
+    <out_trade_no>1008450740201411110005820873</out_trade_no> 
+    <sign>FDD167FAA73459FD921B144BAF4F4CA2</sign>
+</xml>
+```
+ 
+### 5 返回数据
+
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 状态码 | return_code | 是 | String(16) | SUCCESS | SUCCESS或FAIL。这只是个通信标签而非交易标签。交易的状态其实由result_code字段值确定。|
+| 返回数据 | return_msg | 否 | String(128) | Signature failure | 如果非空， 返回的信息都是错误说明，如Signature failure就是参数格式检查错误 |
+ 
+如果return_code为SUCCESS, 返回数据也会包含以下字段：
+ 
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 公众号ID | appid | 是 | String(32) |  wx8888888888888888 | 对应微信分配的公众号ID |
+| 商户ID | mch_id | 是 | String(32) | 1900000109 | 对应微信付款分配的商户ID |
+| 随机字符串 | nonce_str | 是 | String(32) | 5K8264ILTKCH16CQ2502SI8ZNMTM67VS | 最多32位字符。更多信息见4.4.2节随机字符串算法 |
+| 签名 | sign | 是 | String(32) |  C380BEC2BFD727A4B6845133519F3AD6 | 对应签名。更多信息见4.4.1 签名算法 |
+| 错误码 | err_code | 否 | String(32) | SYSTEMERROR | 更多信息见错误码列表 |
+| 错误说明 | err_code_des | 否 | String(128)| System error | 错误数据说明 |
+ 
+```xml
+<xml>
+    <return_code><![CDATA[SUCCESS]]></return_code> 
+    <return_msg><![CDATA[OK]]></return_msg> 
+    <appid><![CDATA[wx2421b1c4370ec43b]]></appid> 
+    <mch_id><![CDATA[10000100]]></mch_id> 
+    <nonce_str><![CDATA[BFK89FC6rxKCOjLX]]></nonce_str> 
+    <sign><![CDATA[72B321D92A7BFA0B2509F3D13C7B1631]]></sign> 
+    <result_code><![CDATA[SUCCESS]]></result_code>
+</xml>
+```
+
+### 6 错误码
+
+| 名称 | 说明 | 原因 | 解答 |
+| --- | --- | --- | --- |
+| ORDERPAID | 订单已付款 | 订单已经支付不需要再次付款了 | 订单已支付，不需要采取进一步措施 |
+| SYSTEMERROR | 系统异常 | 系统超时 | 系统异常，可尝试用同样参数再次调用API |
+| ORDERNOTEXIST | 订单不存在 | 该系统中不存在此订单 | 由于该订单仍处于待处理交易中，请勿尝试关闭该订单 |
+| ORDERCLOSED | 订单已关闭 | 订单已被关闭不能再次操作 | 订单已经关闭了，不需要进一步操作了 | 
+| SIGNERROR | 签名错误 | 不正确的签名结果 | 检查签名参数和方法是否满足签名算法要求 |
+| XML_FORMAT_ERROR | 无效的XML格式 | 无效的XML格式 | 检查XML参数是否组成正确的格式 |
+| REQUIRE_POST_METHOD | 请使用post方法 | 数据没有使用post传输 | 检查数据是否通过POST提交 |
+
+## 4. 提交退款
+
+### 1 用例
+
+> 付款交易完成且付款人或商户要求退款后的一段时间内，商户可以通过此API退款给付款人。微信支付系统成功接收并验证了退款请求后，将根据退款规则将原始付款金额退还给付款人。
+>
+> 注意：
+>
+> 1. 对于超过3个月之前完成的任何交易，均不支持退款
+>
+> 2. 交易退款可以以多份退款的形式处理。在这种情况下，必须提供原始订单号，并且必须设置多个退款号。总退款金额不能超过原始付款金额。
+
+**注意：如果退款请求失败，请使用相同的out_refund_no重试**
+ 
+**请求频率限制：150qps**
+ 
+**错误或无效请求频率限制：60qps**
+
+**注意：一笔订单分开退款要低于50次**
+
+### 2 URL
+ 
+[https://api.mch.weixin.qq.com/secapi/pay/refund](https://api.mch.weixin.qq.com/secapi/pay/refund)
+ 
+### 3 证书要求
+
+> 需要双向证书
+
+### 4 请求参数
+
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 公众号ID | appid | 是 | String(32) |  wx8888888888888888 | 对应微信分配的公众号ID |
+| 商户ID | mch_id | 是 | String(32) | 1900000109 | 对应微信付款分配的商户ID |
+| 设备ID | device_info | 否 | String(32) | 013467007045764 | 对应微信付款分配的终端设备ID。这个字段是商户自定的。注意：如果付款基于PC网页或微信web页执行，该字段值填WEB | 
+| 随机字符串 | nonce_str | 是 | String(32) | 5K8264ILTKCH16CQ2502SI8ZNMTM67VS | 最多32位字符。更多信息见4.4.2节随机字符串算法 |
+| 签名 | sign | 是 | String(32) |  C380BEC2BFD727A4B6845133519F3AD6 | 对应签名。更多信息见4.4.1 签名算法 |
+| 签名类型 | sign_type | 否 | String(32) | HMAC-SHA256 | 当前支持HMAC-SHA256和MD5,默认为MD5。这个字段其实只有加签类型为HMAC-SHA256时才需要 |
+| 微信订单号 | transaction_id | 微信商户选其一 | String(32) | 1217752501201407033233368018 | 微信订单号优先 |
+| 商户订单号 | out_trade_no | 微信商户选其一 | String(32) | 1217752501201407033233368018 | 对应由供应商的系统创建的内部订单号。未提供transaction_id时，此字段为必填字段。|
+| 商户退款号 | out_refund_no | 是 | String(32) | 1217752501201407033233368018 | 系统中是唯一的内部退款号码。 单笔交易可以作为多个部分退款处理，部分退款的总和等于原始交易的总和。|
+| 总金额 | total_fee | 是 | Int | 888 | 对应订单的总价。单位以分表示必须为整数。更多信息见4.2.1节 支付金额 |
+| 退款金额 | refund_fee | 是 | Int | 100 | 对应一笔交易的退款总金额。单位以分表示必须为整数。更多信息见4.2.1节 支付金额 |
+| 货币类型 | refund_fee_type | 否 | String(8) | GBP | 符合ISO-4217标准，基于3个字符。更多信息见4.2.2节 货币种类 |
+| 退款原因 | refund_desc | 否 | String(80) | Products sold out | 商家提交此字段值后，它将通知购物者退款原因。|
+
+**举例：**
+
+```xml
+
+<xml>
+    <appid>wx2421b1c4370ec43b</appid> 
+    <mch_id>10000100</mch_id> 
+    <nonce_str>6cefdb308e1e2e8aabd48cf79e546a02</nonce_str> 
+    <op_user_id>10000100</op_user_id>   // 这个值文档有问题？
+    <out_refund_no>1415701182</out_refund_no> 
+    <out_trade_no>1415757673</out_trade_no> 
+    <refund_fee>1</refund_fee>
+    <total_fee>1</total_fee>
+    <transaction_id>1217752501201407033233368018</transaction_id> 
+    <sign>FE56DD4AA85C0EECA82C35595A69E153</sign>
+</xml>
+```
+
+### 5 返回数据
+
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 状态码 | return_code | 是 | String(16) | SUCCESS | SUCCESS或FAIL。这只是个通信标签而非交易标签。交易的状态其实由result_code字段值确定。|
+| 返回数据 | return_msg | 否 | String(128) | Signature failure | 如果非空， 返回的信息都是错误说明，如Signature failure就是参数格式检查错误 |
+ 
+如果return_code为SUCCESS, 返回数据也会包含以下字段：
+ 
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 结果码 | result_code | 是 | String(16) | SUCCESS | SUCCESS 或 FAIL。获取退款状态可以调用查询退款API|
+| 错误码 | err_code | 否 | String(32) | SYSTEMERROR | 更多信息见错误码列表 |
+| 错误说明 | err_code_des | 否 | String(128)| System error | 错误数据说明 |
+| 公众号ID | appid | 是 | String(32) |  wx8888888888888888 | 调用该接口提交的公众号ID |
+| 商户ID | mch_id | 是 | String(32) | 1900000109 | 调用该接口提交的商户ID |
+| 设备ID | device_info | 否 | String(32) | 013467007045764 | 对应微信付款分配的终端设备ID。此字段中的值必须与创建订单时使用的device_info值匹配 |
+| 随机字符串 | nonce_str | 是 | String(32) | 5K8264ILTKCH16CQ2502SI8ZNMTM67VS | 最多32位字符。更多信息见4.4.2节随机字符串算法 |
+| 签名 | sign | 是 | String(32) |  C380BEC2BFD727A4B6845133519F3AD6 | 对应签名。更多信息见4.4.1 签名算法 |
+| 微信订单号 | transaction_id | 是 | String(32) | 1217752501201407033233368018 | 对应微信支付订单号 |
+| 商户订单号 | out_trade_no | 是 | String(32) | 1217752501201407033233368018 | 对应由商户系统创建的内部订单号。|
+| 商户退款号 | out_refund_no | 是 | String(32) | 1217752501201407033233368018 | 商户退款号|
+| 微信退款号 | refund_id | 是 | String(32) | 1217752501201407033233368018 | 微信退款号 |
+| 退款金额 | refund_fee | 是 | Int | 100 | 对应一笔交易的退款总金额。单位以分表示必须为整数。更多信息见4.2.1节 支付金额 |
+| 货币类型 | refund_fee_type | 否 | String(8) | GBP | 符合ISO-4217标准，基于3个字符。更多信息见4.2.2节 货币种类 |
+| 总金额 | total_fee | 是 | Int | 888 | 对应订单的总价。单位以分表示必须为整数。更多信息见4.2.1节 支付金额 |
+| 货币类型 | fee_type | 是 | String(16) | GBP | 符合ISO-4217标准，基于3个字符。更多信息见4.2.2节 货币种类 |
+| 现金支付金额 | cash_fee | 是 | Int | 100 | 对应交易的现金总金额。更多信息见4.2.1节 支付金额 |
+| 现金类型 | cash_fee_type | 否 | String(16) | CNY | 符合ISO-4217标准，基于3个字符。更多信息见4.2.2节 货币种类 |
+| 现金退款金额 | cash_refund_fee | 是 | Int | 100 | 对应交易的现金退款总金额。更多信息见4.2.1节 支付金额
+| 现金退款类型 | cash_refund_fee_type | 否 | String(8) | CNY | 符合ISO-4217标准，默认人民币。更多信息见4.2.2节 货币种类 |
+| 汇率 | rate | 是 | String(16) | 650000000 | 该值是外币对人民币汇率的10到8幂次 例如，外币对人民币的汇率为6.5，则价值为650000000, 即6.5*10^8 |
+
+**举例：**
+ 
+```xml
+<xml>
+    <return_code><![CDATA[SUCCESS]]></return_code> 
+    <return_msg><![CDATA[OK]]></return_msg> 
+    <appid><![CDATA[wx2421b1c4370ec43b]]></appid> 
+    <mch_id><![CDATA[10000100]]></mch_id> 
+    <nonce_str><![CDATA[NfsMFbUFpdbEhPXP]]></nonce_str> 
+    <sign><![CDATA[B7274EB9F8925EB93100DD2085FA56C0]]></sign> 
+    <result_code><![CDATA[SUCCESS]]></result_code> 
+    <transaction_id><![CDATA[1008450740201411110005820873]]></transaction_id> 
+    <out_trade_no><![CDATA[1415757673]]></out_trade_no> 
+    <out_refund_no><![CDATA[1415701182]]></out_refund_no> 
+    <refund_id><![CDATA[2008450740201411110000174436]]></refund_id> 
+    <refund_channel><![CDATA[]]></refund_channel>
+    <refund_fee>1</refund_fee>
+    <coupon_refund_fee>0</coupon_refund_fee>
+</xml>
+```
+
+### 6 错误码
+
+| 名称 | 说明 | 原因 | 解答 |
+| --- | --- | --- | --- |
+| SYSTEMERROR | 系统异常 | 系统超时 | 系统异常，可尝试用同样参数再次调用API |
+| USER_ACCOUNT_ABNORMAL | 退款请求失败 | 用户账户取消 | 该错误代码表示退款请求失败，商家需要自行处理退款 |
+| NOTENOUGH | 未结清的资金不足以退款 | 未结清的资金不足以退款 | 此错误代码表示退款请求失败，当有足够的未结算资金时，商家可以重新调用退款API一次，或多次尝试 |
+| INVALID_TRANSACTIONID | 无效transaction_id | 请求参数不正确 | 请求参数不正确，检查原参数 |
+| PARAM_ERROR | 参数错误 | 请求参数不正确 | 请求参数不正确，检查原参数 |
+| APPID_NOT_EXIST | appid不存在 | 缺少appid参数 | 检查并提供正确的appid |
+| MCHID_NOT_EXIST | mchid不存在 | 缺少mchid参数 | 检查并提供正确的mchid |
+| APPID_MCHID_NOT_MATCH | appid和mchid不匹配 | appid和mchid不匹配 | 检查appid是否属于相关msch_id |
+| SIGNERROR | 签名错误 | 不正确的签名结果 | 检查签名参数和方法是否满足签名算法要求 |
+| XML_FORMAT_ERROR | 无效的XML格式 | 无效的XML格式 | 检查XML参数是否组成正确的格式 |
+
+## 5. 查询退款
+
+### 1 用例
