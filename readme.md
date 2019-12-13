@@ -562,7 +562,7 @@ todo
 | 交易开始时间 | time_start | 否 | String(14) | 20091225091010 | 对应为yyyyMMddHHmmss格式的交易创建时间，如Dec 25, 2009 09:10:10 (UTC+08)就是20091225091010。更多信息见4.2.3 时间协议 |
 | 交易结束时间 | time_expire | 否 | String(14) | 20091227091010 | 格式同交易开始时间，但是最短交易结束时间至少大于交易开始时间5分钟 |
 | 项目标签 | goods_tag | 否 | String(32)| WXG | 对应商品标签，是一个优惠券功能中的参数。详细见第10节 移动优惠券 |
-| 通知URL | notify_url | 是 | String(256)| http://www.baidu.c om/ | 对应接收微信付款通知的回调地址 | 
+| 通知URL | notify_url | 是 | String(256)| http://www.baidu.com/ | 对应接收微信付款通知的回调地址 | 
 | 交易类型 | trade_type | 是 | String(16) | JSAPI | 可设置为JSAPI, NATIVE, 或APP |
 | 产品ID | product_id | 否 | String(32) | 12235413214070356458058 | 仅当trade_type为NATIVE时才需要此字段。此ID包含商户设置的产品ID。|
 | 限制付款方式 | limit_pay | 否 | String(32) | no_credit | no_credit: 不允许使用信用卡付款 |
@@ -717,6 +717,7 @@ todo
 如果return_code和result_code都是SUCCESS, 返回数据也会包含以下字段：
  
 **注意：如果trade_state不为SUCCESS, 则只会返回out_trade_no和attach**
+ 
 | 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
 | --- | --- | --- | --- | --- | --- |
 | 设备ID | device_info | 否 | String(32) | 013467007045764 | 对应微信付款分配的终端设备ID。| 
@@ -886,7 +887,7 @@ todo
 | 签名 | sign | 是 | String(32) |  C380BEC2BFD727A4B6845133519F3AD6 | 对应签名。更多信息见4.4.1 签名算法 |
 | 签名类型 | sign_type | 否 | String(32) | HMAC-SHA256 | 当前支持HMAC-SHA256和MD5,默认为MD5。这个字段其实只有加签类型为HMAC-SHA256时才需要 |
 | 微信订单号 | transaction_id | 微信商户选其一 | String(32) | 1217752501201407033233368018 | 微信订单号优先 |
-| 商户订单号 | out_trade_no | 微信商户选其一 | String(32) | 1217752501201407033233368018 | 对应由供应商的系统创建的内部订单号。未提供transaction_id时，此字段为必填字段。|
+| 商户订单号 | out_trade_no | 微信商户选其一 | String(32) | 1217752501201407033233368018 | 对应商户系统创建的内部订单号。未提供transaction_id时，此字段为必填字段。|
 | 商户退款号 | out_refund_no | 是 | String(32) | 1217752501201407033233368018 | 系统中是唯一的内部退款号码。 单笔交易可以作为多个部分退款处理，部分退款的总和等于原始交易的总和。|
 | 总金额 | total_fee | 是 | Int | 888 | 对应订单的总价。单位以分表示必须为整数。更多信息见4.2.1节 支付金额 |
 | 退款金额 | refund_fee | 是 | Int | 100 | 对应一笔交易的退款总金额。单位以分表示必须为整数。更多信息见4.2.1节 支付金额 |
@@ -971,7 +972,7 @@ todo
 | --- | --- | --- | --- |
 | SYSTEMERROR | 系统异常 | 系统超时 | 系统异常，可尝试用同样参数再次调用API |
 | USER_ACCOUNT_ABNORMAL | 退款请求失败 | 用户账户取消 | 该错误代码表示退款请求失败，商家需要自行处理退款 |
-| NOTENOUGH | 未结清的资金不足以退款 | 未结清的资金不足以退款 | 此错误代码表示退款请求失败，当有足够的未结算资金时，商家可以重新调用退款API一次，或多次尝试 |
+| NOTENOUGH | 未结清的资金不足以退款 | 未结清的资金不足以退款 | 此错误代码表示退款请求失败，一旦有足够的未结算资金，商家需要重新调用退款API一次或尝试多次 |
 | INVALID_TRANSACTIONID | 无效transaction_id | 请求参数不正确 | 请求参数不正确，检查原参数 |
 | PARAM_ERROR | 参数错误 | 请求参数不正确 | 请求参数不正确，检查原参数 |
 | APPID_NOT_EXIST | appid不存在 | 缺少appid参数 | 检查并提供正确的appid |
@@ -983,3 +984,132 @@ todo
 ## 5. 查询退款
 
 ### 1 用例
+> 提交"提交退款API"后，可以调用此API来检查退款状态。 提交退款后，退款处理可能会有所延迟：退款至余额需20分钟，退款至银行卡需3个工作日。
+>
+>注意：一旦一笔订单的部分退款超过20次，请使用供应商退款编号进行退款查询。
+
+### 2 URL
+[https://api.mch.weixin.qq.com/pay/refundquery](https://api.mch.weixin.qq.com/pay/refundquery)
+ 
+### 3 证书要求
+
+无
+
+### 4 请求参数
+ 
+**注意：所有下表$n都从0开始**
+
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 公众号ID | appid | 是 | String(32) |  wx8888888888888888 | 对应微信分配的公众号ID |
+| 商户ID | mch_id | 是 | String(32) | 1900000109 | 对应微信付款分配的商户ID |
+| 设备ID | device_info | 否 | String(32) | 013467007045764 | 对应微信付款分配的终端设备ID。这个字段是商户自定的。注意：如果付款基于PC网页或微信web页执行，该字段值填WEB | 
+| 随机字符串 | nonce_str | 是 | String(32) | 5K8264ILTKCH16CQ2502SI8ZNMTM67VS | 最多32位字符。更多信息见4.4.2节随机字符串算法 |
+| 签名 | sign | 是 | String(32) |  C380BEC2BFD727A4B6845133519F3AD6 | 对应签名。更多信息见4.4.1 签名算法 |
+| 签名类型 | sign_type | 否 | String(32) | HMAC-SHA256 | 当前支持HMAC-SHA256和MD5,默认为MD5。这个字段其实只有加签类型为HMAC-SHA256时才需要 |
+| 微信订单号 | transaction_id | 选其一 | String(32) | 1217752501201407033233368018 | 对应微信订单号 |
+| 商户订单号 | out_trade_no | 选其一 | String(32) | 1217752501201407033233368018 | 对应由商户系统创建的内部订单号|
+| 商户退款号 | out_refund_no | 选其一 | String(32) | 1217752501201407033233368018 | 对应商户退款号|
+| 微信退款号 | refund_id | 选其一 | String(32) | 1217752501201407033233368018 | 从提交退款API返回得到的微信退款号。该字段将提供refund_id，out_refund_no，out_trade_no或transaction_id。 它们的优先级如下所示：refund_id>out_refund_no>transaction_id>out_trade_no |
+
+**举例：**
+ 
+```xml
+<xml>
+<appid>wx2421b1c4370ec43b</appid> 
+<mch_id>10000100</mch_id> 
+<nonce_str>0b9f35f484df17a732e537c37708d1d0</nonce_str> 
+<out_refund_no></out_refund_no> 
+<out_trade_no>1415757673</out_trade_no> 
+<refund_id></refund_id>
+<transaction_id></transaction_id> 
+<sign>66FFB727015F450D167EF38CCC549521</sign>
+</xml>
+```
+
+### 5 返回数据
+
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 状态码 | return_code | 是 | String(16) | SUCCESS | SUCCESS或FAIL。这只是个通信标签而非交易标签。交易的状态其实由result_code字段值确定。|
+| 返回数据 | return_msg | 否 | String(128) | Signature failure | 如果非空， 返回的信息都是错误说明，如Signature failure就是参数格式检查错误 |
+ 
+如果return_code为SUCCESS, 返回数据也会包含以下字段：
+ 
+| 字段名称 | ID | 必要性 | 类型 | 案例 | 说明 |
+| --- | --- | --- | --- | --- | --- |
+| 结果码 | result_code | 是 | String(16) | SUCCESS | SUCCESS 或 FAIL。|
+| 错误码 | err_code | 否 | String(32) | SYSTEMERROR | 更多信息见错误码列表 |
+| 错误说明 | err_code_des | 否 | String(128)| System error | 错误数据说明 |
+| 公众号ID | appid | 是 | String(32) |  wx8888888888888888 | 调用该接口提交的公众号ID |
+| 商户ID | mch_id | 是 | String(32) | 1900000109 | 调用该接口提交的商户ID |
+| 设备ID | device_info | 否 | String(32) | 013467007045764 | 对应微信付款分配的终端设备ID。此字段中的值必须与创建订单时使用的device_info值匹配 |
+| 随机字符串 | nonce_str | 是 | String(32) | 5K8264ILTKCH16CQ2502SI8ZNMTM67VS | 最多32位字符。更多信息见4.4.2节随机字符串算法 |
+| 签名 | sign | 是 | String(32) |  C380BEC2BFD727A4B6845133519F3AD6 | 对应签名。更多信息见4.4.1 签名算法 |
+| 微信订单号 | transaction_id | 是 | String(32) | 1217752501201407033233368018 | 对应微信支付订单号 |
+| 商户订单号 | out_trade_no | 是 | String(32) | 1217752501201407033233368018 | 对应由商户系统创建的内部订单号。|
+| 总金额 | total_fee | 是 | Int | 888 | 对应订单的总价。单位以分表示必须为整数。更多信息见4.2.1节 支付金额 |
+| 货币类型 | fee_type | 是 | String(16) | GBP | 符合ISO-4217标准，基于3个字符。更多信息见4.2.2节 货币种类 |
+| 现金支付金额 | cash_fee | 是 | Int | 100 | 对应交易的现金总金额。更多信息见4.2.1节 支付金额 |
+| 现金类型 | cash_fee_type | 否 | String(16) | CNY | 符合ISO-4217标准，基于3个字符。更多信息见4.2.2节 货币种类 |
+| 退款金额 | refund_fee_$n | 是 | Int | 100 | 退款可以作为多次部分退款处理。出价货币类型应与出价金额一致。单位以分表示必须为整数。更多信息见4.2.1节 支付金额 |
+| 退款计数 | refund_count | 是 | Int | 1 | 退款次数记录 |
+| 商户退款号 | out_refund_no_$n | 是 | String(32) | 1217752501201407033233368018 | 商户退款号 |
+| 微信退款号 | refund_id_$n | 是 | String(32) | 1217752501201407033233368018 | 微信退款号 |
+| 退款渠道 | refund_channel_$n | 否 | String(16)| ORIGINAL | ORIGINAL：退款至原账户。BALANCE: 退款至余额。OTHER_BALANCE:由于原账户异常，退款至其他微信账户余额。OTHER_BANKCARD：由于原银行卡异常，退款到其他银行卡|
+| 退款状态 | refund_status_$n | 是 | String(16) | SUCCESS | SUCCESS：退款成功。REFUNDCLOSE：退款失败。PROCESSING：等待退款。NOTSURE：需要商户使用原退款号再次调用提交退款API。CHANGE：由于付款人的银行卡被吊销或冻结无法处理退款。因此，退款将转入商户的现金帐户。在这种情况下，退款必须在商户的客户协助人员的帮助下进行离线处理，也可以通过财付通将退款金额从商户转移到付款人。|
+| 接收退款账户| refund_recv_accout_$n | 是 | String(64) | 招商银行信用卡 0403 | 最后退款的账户格式：<br>1.退回银行卡：{银行名}{银行卡类别}{尾号} <br>2.退回余额：支付用户零钱。<br>3. 退回商家：商户基本账户 Merchants’ basic account，商户结算银行账户 Merchants’ bank account |
+| 退款成功时间 | refund_success_time_$n | 否 | String(20) | 2016-07-25 15:26:26 | 退款成功时间，仅在退款成功完成后返回。|
+| 汇率 | rate | 是 | String(16) | 650000000 | 该值是外币对人民币汇率的10到8幂次 例如，外币对人民币的汇率为6.5，则价值为650000000, 即6.5*10^8 |
+
+**举例：**
+ 
+```xml
+<xml>
+    <appid><![CDATA[wx2421b1c4370ec43b]]></appid> 
+    <mch_id><![CDATA[10000100]]></mch_id> 
+    <nonce_str><![CDATA[TeqClE3i0mvn3DrK]]></nonce_str> 
+    <out_refund_no_0><![CDATA[1415701182]]></out_refund_no_0> 
+    <out_trade_no><![CDATA[1415757673]]></out_trade_no> 
+    <refund_count>1</refund_count>
+    <refund_fee_0>1</refund_fee_0> 
+    <refund_id_0><![CDATA[2008450740201411110000174436]]></refund_id_0> 
+    <refund_status_0><![CDATA[PROCESSING]]></refund_status_0> 
+    <result_code><![CDATA[SUCCESS]]></result_code> 
+    <return_code><![CDATA[SUCCESS]]></return_code> 
+    <return_msg><![CDATA[OK]]></return_msg> 
+    <sign><![CDATA[1F2841558E233C33ABA71A961D27561C]]></sign> 
+    <transaction_id><![CDATA[1008450740201411110005820873]]></transaction_id>
+</xml>
+```
+
+### 6 错误码
+
+| 名称 | 说明 | 原因 | 解答 |
+| --- | --- | --- | --- |
+| SYSTEMERROR | 系统异常 | 系统超时 | 系统异常，可尝试用同样参数再次调用API |
+| REFUNDNOTEXIST | 查询退款失败 | 退款号错误或订单状态不在退款流程 | 请检查退款号码或交易ID是否正确，或者订单是否已付款或正在退款中。 |
+| INVALID_TRANSACTIONID | 无效transaction_id | 请求参数不正确 | 请求参数不正确，检查原参数 |
+| PARAM_ERROR | 参数错误 | 请求参数不正确 | 请求参数不正确，检查原参数 |
+| APPID_NOT_EXIST | appid不存在 | 缺少appid参数 | 检查并提供正确的appid |
+| MCHID_NOT_EXIST | mchid不存在 | 缺少mchid参数 | 检查并提供正确的mchid |
+| APPID_MCHID_NOT_MATCH | appid和mchid不匹配 | appid和mchid不匹配 | 检查appid是否属于相关msch_id |
+| REQUIRE_POST_METHOD | 请使用post方法 | 数据没有使用post传输 | 检查数据是否通过POST提交 |
+| SIGNERROR | 签名错误 | 不正确的签名结果 | 检查签名参数和方法是否满足签名算法要求 |
+| XML_FORMAT_ERROR | 无效的XML格式 | 无效的XML格式 | 检查XML参数是否组成正确的格式 |
+
+## 6. 下载对账文件 
+
+## 7. 通常支付结果通知
+
+## 8. 报告速度测试
+
+## 9. 短URL转换
+
+# 10. 查询已结算的资金
+
+# 12.下载付款SDK
+
+
+
+
