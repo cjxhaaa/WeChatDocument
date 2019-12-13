@@ -724,7 +724,7 @@ todo
 | 用户标签 | openid | 否 | String(128) | wxd930ea5d5a258f4f | 对应微信系统提供的付款人的用户ID（每个appid实例唯一的OpenID格式） |
 | 是否关注公众号 | is_subscribe | 否 | String(1) | Y | 对应付款人是否关注了关联的公众号，Y表示关注，N表述未关注 |
 | 交易类型 | trade_type | 是 | String(16) | JSAPI | 可设置为JSAPI, NATIVE,MICROPAY. 或APP |
-| 交易状态 | trade_state | 是 | String(32) | SUCCESS | SUCCESS: 付款成功。REFUND：订单将被退款。NOTPAY: 订单未支付。CLOSED: 订单被关闭。REVOKED: 订单被取消。USERPAYING: 等待用户支付。PAYERROR: 支付失败（由于银行或其他原因支付状态返回失败）|
+| 交易状态 | trade_state | 是 | String(32) | SUCCESS | SUCCESS: 付款成功。<br>REFUND：订单将被退款。<br>NOTPAY: 订单未支付。<br>CLOSED: 订单被关闭。<br>REVOKED: 订单被取消。<br>USERPAYING: 等待用户支付。<br>PAYERROR: 支付失败（由于银行或其他原因支付状态返回失败）|
 | 付款银行 | bank_type | 是 | String(16) | CMC | 银行类别字符串 |
 | 总金额 | total_fee | 是 | Int | 888 | 对应订单的总价。单位以分表示必须为整数。更多信息见4.2.1节 支付金额 |
 | 货币类型 | fee_type | 是 | String(16) | GBP | 符合ISO-4217标准，基于3个字符。更多信息见4.2.2节 货币种类 |
@@ -1056,9 +1056,9 @@ todo
 | 退款计数 | refund_count | 是 | Int | 1 | 退款次数记录 |
 | 商户退款号 | out_refund_no_$n | 是 | String(32) | 1217752501201407033233368018 | 商户退款号 |
 | 微信退款号 | refund_id_$n | 是 | String(32) | 1217752501201407033233368018 | 微信退款号 |
-| 退款渠道 | refund_channel_$n | 否 | String(16)| ORIGINAL | ORIGINAL：退款至原账户。BALANCE: 退款至余额。OTHER_BALANCE:由于原账户异常，退款至其他微信账户余额。OTHER_BANKCARD：由于原银行卡异常，退款到其他银行卡|
-| 退款状态 | refund_status_$n | 是 | String(16) | SUCCESS | SUCCESS：退款成功。REFUNDCLOSE：退款失败。PROCESSING：等待退款。NOTSURE：需要商户使用原退款号再次调用提交退款API。CHANGE：由于付款人的银行卡被吊销或冻结无法处理退款。因此，退款将转入商户的现金帐户。在这种情况下，退款必须在商户的客户协助人员的帮助下进行离线处理，也可以通过财付通将退款金额从商户转移到付款人。|
-| 接收退款账户| refund_recv_accout_$n | 是 | String(64) | 招商银行信用卡 0403 | 最后退款的账户格式：<br>1.退回银行卡：{银行名}{银行卡类别}{尾号} <br>2.退回余额：支付用户零钱。<br>3. 退回商家：商户基本账户 Merchants’ basic account，商户结算银行账户 Merchants’ bank account |
+| 退款渠道 | refund_channel_$n | 否 | String(16)| ORIGINAL | ORIGINAL：退款至原账户。<br>BALANCE: 退款至余额。<br>OTHER_BALANCE:由于原账户异常，退款至其他微信账户余额。<br>OTHER_BANKCARD：由于原银行卡异常，退款到其他银行卡|
+| 退款状态 | refund_status_$n | 是 | String(16) | SUCCESS | SUCCESS：退款成功。<br>REFUNDCLOSE：退款失败。<br>PROCESSING：等待退款。<br>NOTSURE：需要商户使用原退款号再次调用提交退款API。<br>CHANGE：由于付款人的银行卡被吊销或冻结无法处理退款。因此，退款将转入商户的现金帐户。在这种情况下，退款必须在商户的客户协助人员的帮助下进行离线处理，也可以通过财付通将退款金额从商户转移到付款人。|
+| 接收退款账户| refund_recv_accout_$n | 是 | String(64) | 招商银行信用卡 0403 | 最后退款的账户格式：<br>1.退回银行卡：{银行名}{银行卡类别}{尾号} <br>2.退回余额：支付用户零钱。<br>3. 退回商家：<br>商户基本账户 Merchants’ basic account，<br>商户结算银行账户 Merchants’ bank account |
 | 退款成功时间 | refund_success_time_$n | 否 | String(20) | 2016-07-25 15:26:26 | 退款成功时间，仅在退款成功完成后返回。|
 | 汇率 | rate | 是 | String(16) | 650000000 | 该值是外币对人民币汇率的10到8幂次 例如，外币对人民币的汇率为6.5，则价值为650000000, 即6.5*10^8 |
 
